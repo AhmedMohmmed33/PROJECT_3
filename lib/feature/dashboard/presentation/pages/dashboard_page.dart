@@ -3,6 +3,8 @@ import 'package:flutter_application_1/feature/alerts/presentation/pages/alerts_p
 import 'package:flutter_application_1/feature/map/presentation/pages/map_page.dart';
 import 'package:flutter_application_1/feature/settings/presentation/pages/settings_page.dart';
 import 'package:flutter_application_1/feature/custom_drawer.dart';
+import 'package:flutter_application_1/feature/vehicle_details/presentation/pages/vehicle_details_page.dart';
+import 'package:flutter_application_1/feature/custom_buttom_nav.dart';
 
 
 class DashboardPage extends StatefulWidget {
@@ -32,85 +34,17 @@ class _DashboardPageState extends State<DashboardPage> {
         },
       ),// Changed to black
       body: _pages[_currentIndex],
-      floatingActionButton: _currentIndex == 0 
-        ? FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: const Color.fromARGB(255, 0, 229, 255),
-            foregroundColor: Colors.white,
-            child: const Icon(Icons.add),
-          )
-        : null,
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: const Color.fromARGB(255, 0, 229, 255),
-          unselectedItemColor: Colors.white, // Changed from white to grey
-          backgroundColor: Colors.black,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/${_currentIndex == 0 ? 'active_car' : 'inactive_car'}.png',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 0 
-                    ? const Color.fromARGB(255, 0, 229, 255) 
-                    : Colors.white,
-              ),
-              label: 'Dashboard',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/${_currentIndex == 1 ? 'active_map' : 'inactive_map'}.png',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 1 
-                    ? const Color.fromARGB(255, 0, 229, 255) 
-                    : Colors.white,
-              ),
-              label: 'Map',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/${_currentIndex == 2 ? 'active_alerts' : 'inactive_alerts'}.png',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 2 
-                    ? const Color.fromARGB(255, 0, 229, 255) 
-                    : Colors.white,
-              ),
-              label: 'Alerts',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/${_currentIndex == 3 ? 'active_settings' : 'inactive_settings'}.png',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 3 
-                    ? const Color.fromARGB(255, 0, 229, 255) 
-                    : Colors.white,
-              ),
-              label: 'Settings',
-            ),
-          ],
-        ),
+      
+      bottomNavigationBar: CustomBottomNav(
+        currentIndex: _currentIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
+
+      
     );
   }
   
@@ -169,21 +103,21 @@ class MyVehiclesPage extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             children: const [
               VehicleCard(
-                name: 'Canny Sedan',
+                name: 'BMW X3 M50',
                 status: 'Driving',
                 statusColor: Color(0xFF4CAF50),
                 imagePath: 'assets/images/car1.webp',
               ),
               SizedBox(height: 16),
               VehicleCard(
-                name: 'Honda SUV',
+                name: 'Canny Sedan',
                 status: 'Parked',
                 statusColor: Color(0xFF2196F3),
                 imagePath: 'assets/images/car2.webp',
               ),
               SizedBox(height: 16),
               VehicleCard(
-                name: 'BMW X3 M50',
+                name: 'Honda SUV',
                 status: 'Driving',
                 statusColor: Color(0xFF4CAF50),
                 imagePath: 'assets/images/car3.jpeg',
@@ -221,7 +155,17 @@ class VehicleCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          // Navigate to vehicle details
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VehicleDetailsPage(
+                vehicleName: name,
+                status: status,
+                statusColor: statusColor,
+                imagePath: imagePath,
+              ),
+            ),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(16),

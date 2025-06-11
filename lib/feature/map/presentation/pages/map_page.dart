@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/feature/custom_drawer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
@@ -37,7 +38,12 @@ class MapPage extends StatelessWidget {
           ),
         ),
       ),
-      body: const Center(child: Text('Map Content')),
+      body: const GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(30.0444, 31.2357), // Example: Cairo
+          zoom: 14.0,
+        ),
+      ),
     );
   }
 
