@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_application_1/feature/custom_drawer.dart';
 
 class AlertsPage extends StatelessWidget {
@@ -9,7 +8,7 @@ class AlertsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer:  CustomDrawer(
+      drawer: CustomDrawer(
         currentIndex: 2,
         onItemSelected: (index) {
           if (index != 2) {
@@ -17,7 +16,6 @@ class AlertsPage extends StatelessWidget {
           }
         },
       ),
-       // Light grey background
       appBar: AppBar(
         title: const Text(
           'Alerts',
@@ -32,7 +30,8 @@ class AlertsPage extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Image.asset('assets/icons/menu.png',
+            icon: Image.asset(
+              'assets/icons/menu.png',
               width: 30,
               height: 30,
               color: Colors.black,
@@ -46,64 +45,74 @@ class AlertsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Summary Cards
+            const Row(
+              children: [
+                Expanded(
+                  child: _InfoTile(
+                    icon: Icon(Icons.warning_amber, color: Colors.red),
+                    title: 'Critical Alerts',
+                    value: '3',
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: _InfoTile(
+                    icon: Icon(Icons.notifications_active, color: Colors.orange),
+                    title: 'Warnings',
+                    value: '7',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            
             // Alerts Container
             Container(
-              width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.all(16),
               child: Column(
-
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 12),
-                  // Header Section
                   const Text(
-                  'Recent Driving Alerts',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    'Recent Driving Alerts',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-              'Monitoring alerts from all vehicles in your fleet',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 24),
-                  _buildAlertCard(
-                    alertType: 'Normal Driving',
-                    vehicle: 'Work Sedan',
-                    time: '5/12/2025 ● 3:08 AM',
-                    isNormal: true,
-                  ),
                   const SizedBox(height: 12),
-                  _buildAlertCard(
-                    alertType: 'Aggressive Driving',
+                  _alertCard(
+                    time: '5/12/2025 • 3:08 AM',
                     vehicle: 'Work Sedan',
-                    time: '5/12/2025 ● 3:07 AM',
-                    isNormal: false,
+                    tags: ['Normal Driving'],
+                    isCritical: false,
                   ),
-                  const SizedBox(height: 12),
-                  _buildAlertCard(
-                    alertType: 'Distracted',
-                    vehicle: 'Work Sedan',
-                    time: '5/12/2025 ● 3:06 AM',
-                    isNormal: false,
+                  const SizedBox(height: 16),
+                  _alertCard(
+                    time: '5/12/2025 • 3:07 AM',
+                    vehicle: 'BMW X3 M50',
+                    tags: ['Aggressive Driving'],
+                    isCritical: true,
                   ),
-                  const SizedBox(height: 12),
-                  _buildAlertCard(
-                    alertType: 'Normal Driving',
-                    vehicle: 'Work Sedan',
-                    time: '5/12/2025 ● 3:08 AM',
-                    isNormal: true,
+                  const SizedBox(height: 16),
+                  _alertCard(
+                    time: '5/12/2025 • 3:06 AM',
+                    vehicle: 'Honda SUV',
+                    tags: ['Distracted', 'Speeding'],
+                    isCritical: true,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
+                  _alertCard(
+                    time: '5/12/2025 • 3:05 AM',
+                    vehicle: 'Canny Sedan',
+                    tags: ['Normal Driving'],
+                    isCritical: false,
+                  ),
                 ],
               ),
             ),
@@ -122,44 +131,140 @@ class AlertsPage extends StatelessWidget {
     }
   }
 
-  Widget _buildAlertCard({
-    required String alertType,
-    required String vehicle,
+  Widget _alertCard({
     required String time,
-    required bool isNormal,
+    required String vehicle,
+    required List<String> tags,
+    required bool isCritical,
   }) {
     return Container(
-      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Card(
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    time, 
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    vehicle,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: isCritical ? Colors.red : Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: tags.map((tag) => _buildTag(tag)).toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTag(String text) {
+    Color color;
+    switch (text) {
+      case 'Aggressive Driving':
+        color = Colors.red;
+        break;
+      case 'Normal Driving':
+        color = Colors.green;
+        break;
+      case 'Distracted':
+        color = Colors.orange;
+        break;
+      case 'Speeding':
+        color = Colors.purple;
+        break;
+      default:
+        color = Colors.grey;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white, 
+          fontWeight: FontWeight.w500
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoTile extends StatelessWidget {
+  final Widget icon;
+  final String title;
+  final String value;
+
+  const _InfoTile({
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-      ),
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            alertType,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: isNormal ? Colors.green : Colors.red,
-            ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          icon,
           const SizedBox(height: 8),
           Text(
-            vehicle,
+            title,
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.black87,
+              color: Colors.black,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            time,
+            value,
             style: const TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
             ),
           ),
         ],

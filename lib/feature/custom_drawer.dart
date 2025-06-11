@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/feature/auth/presentation/pages/login_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   final int currentIndex;
@@ -30,7 +31,7 @@ class CustomDrawer extends StatelessWidget {
                     Row(
                       children: [
                         Image.asset(
-                          'assets/icons/active_car.png',
+                          'assets/icons/driver.png',
                           width: 30,
                           height: 30,
                         ),
@@ -153,6 +154,11 @@ class CustomDrawer extends StatelessWidget {
       onTap: () {
         Navigator.pop(context); // Close drawer
         // Add sign out logic here
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+          (Route<dynamic> route) => false, // Remove all previous routes
+        );
       },
     );
   }
