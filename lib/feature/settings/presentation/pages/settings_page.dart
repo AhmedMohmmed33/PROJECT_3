@@ -161,8 +161,8 @@ class SettingsPage extends StatelessWidget {
                         children: [
                           // Profile Picture
                           Container(
-                            width: 70,
-                            height: 70,
+                            width: 50,
+                            height: 50,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.grey[800],
@@ -172,14 +172,14 @@ class SettingsPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 14),
                           // User Info
                           const Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'John Doe',
+                                  'username',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.white,
@@ -188,7 +188,7 @@ class SettingsPage extends StatelessWidget {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  'john.doe@example.com',
+                                  'email@example.com',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,
